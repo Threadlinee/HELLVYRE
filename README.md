@@ -68,5 +68,10 @@ Created by Threadlinee — reach out for questions, suggestions, or collabs via 
 python2 hellvyre.py
 Enter your target, and watch the storm unfold. But remember — use wisely and legally.
 
-Stay safe, stay ethical. ✌️
+Educational Purposes Only!! Stay safe, stay ethical. ✌️
 
+
+# ☕ Support
+If you find this tool useful, drop a ⭐ or fork it. Contributions and proxy improvements are welcome.
+
+[![Buy Me a Coffee](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/G2G114SBVV)
