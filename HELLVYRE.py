@@ -3499,7 +3499,7 @@ else:
 		sys.exit()
 	else:
 		print "Starting the Attack"
-		print "ANONYMOUS"
+		print "Threadlinee"
 		if len(sys.argv)== 3:
 			if sys.argv[2]=="safe":
 				set_safe()
