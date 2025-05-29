@@ -5,6 +5,7 @@ import threading
 import random
 import re
 import time
+from urllib.parse import urlparse
 from headers import get_user_agents, get_referers
 
 url=''
@@ -49,7 +50,7 @@ def usage():
     print('Example: python ' + sys.argv[0] + ' http://www.example.com')
 
 def httpcall(url):
-    global request_counter
+    global request_counter, host
     useragent_list()
     referer_list()
     
@@ -114,8 +115,9 @@ if __name__ == '__main__':
         if not url.startswith(('http://', 'https://')):
             url = 'http://' + url
             
-        # Extract host properly
-        host = re.search('https?://([^/]+)', url).group(1)
+        # Extract host properly using urlparse
+        parsed_url = urlparse(url)
+        host = parsed_url.netloc
         
         print('[+] Target:', url)
         print('[+] Host:', host)
