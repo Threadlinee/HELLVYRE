@@ -32,7 +32,7 @@ Verify Python 2 is installed:
 python2 --version
 Run the tool:
 
-python2 hellvyre.py
+python2 HELLVYRE.py
 # 🎮 How to Use
 When prompted, enter the target URL or IP address you want to stress test
 
@@ -68,7 +68,7 @@ Created by Threadlinee — reach out for questions, suggestions, or collabs via 
 
 🔥 Ready to unleash HELLVYRE?
 
-python2 hellvyre.py
+python2 HELLVYRE.py
 Enter your target, and watch the storm unfold. But remember — use wisely and legally.
 
 Educational Purposes Only!! Stay safe, stay ethical. ✌️
