@@ -1,4 +1,5 @@
-import urllib2
+import urllib.request
+import urllib.error
 import sys
 import threading
 import random
@@ -54,7 +55,7 @@ def httpcall(url):
         param_joiner="&"
     else:
         param_joiner="?"
-    request = urllib2.Request(url + param_joiner + buildblock(random.randint(3,10)) + '=' + buildblock(random.randint(3,10)))
+    request = urllib.request.Request(url + param_joiner + buildblock(random.randint(3,10)) + '=' + buildblock(random.randint(3,10)))
     request.add_header('User-Agent', random.choice(headers_useragents))
     request.add_header('Cache-Control', 'no-cache')
     request.add_header('Accept-Charset', 'ISO-8859-1,utf-8;q=0.7,*;q=0.7')
@@ -63,10 +64,10 @@ def httpcall(url):
     request.add_header('Connection', 'keep-alive')
     request.add_header('Host',host)
     try:
-        urllib2.urlopen(request)
-    except urllib2.HTTPError as e:
+        urllib.request.urlopen(request)
+    except urllib.error.HTTPError as e:
         code = e.code
-    except urllib2.URLError as e:
+    except urllib.error.URLError as e:
         code = e.code
     return code
 
