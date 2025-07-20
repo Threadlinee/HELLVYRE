@@ -1,7 +1,4 @@
-# 🔥 — HELLVYRE — 🔥
-
-![pngdragon (1) (1)](https://github.com/user-attachments/assets/6e0e7384-db23-4f80-8046-109917195638)
-
+# 🔥 — HELLVYRE — LINUX ONLY🔥
 Welcome to HELLVYRE, a powerful yet minimalist DDoS stress testing tool built in Python 2. Designed for simplicity and effectiveness, HELLVYRE enables security professionals, network admins, and ethical hackers to perform quick stress tests on web servers by flooding targets with traffic — requiring no complicated setup or arguments. Just input the target and let it rip. ⚡
 
 # 🚀 Features
